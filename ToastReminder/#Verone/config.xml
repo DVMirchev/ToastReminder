@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Verone xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <WorkingDir>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\#Verone</WorkingDir>
+  <Language>Cpp11</Language>
+  <ThreadsCount>1</ThreadsCount>
+  <IncludeDirs>
+    <IncludeDir>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt</IncludeDir>
+    <IncludeDir />
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\um</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\shared</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\winrt</IncludeDir>
+  </IncludeDirs>
+  <Files>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\ToastReminder.h</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\ToastReminder.cpp</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\ToastReminderDlg.h</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\ToastReminderDlg.cpp</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\stdafx.h</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\targetver.h</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\stdafx.cpp</File>
+    <File>D:\`Dimitko\`GitHUB\ToastReminder\ToastReminder\ToastReminder\Resource.h</File>
+  </Files>
+</Verone>
