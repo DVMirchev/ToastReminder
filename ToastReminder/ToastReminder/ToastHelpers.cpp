@@ -7,9 +7,7 @@ using namespace ABI::Windows::Data::Xml::Dom;
 using namespace Windows::Foundation;
 using namespace ABI::Windows::UI::Notifications;
 
-const wchar_t AppId[] = L"Dimitar Toeaster Reminder";
-
-
+const std::basic_string<wchar_t> AppId = _T("Dimitar Toeaster Reminder");
 // Display the toast using classic COM. Note that is also possible to create and display the toast using the new C++ /ZW options (using handles,
 // COM wrappers, etc.) 
 HRESULT DisplayToast(const ToastParams &params)
@@ -86,9 +84,9 @@ HRESULT SetImageSrc(_In_z_ wchar_t *imagePath, _In_ IXmlDocument *toastXml)
 }
 
 // Set the values of each of the text nodes
-HRESULT SetTextValues(std::vector<std::basic_string<wchar_t>> vectLines, _In_ IXmlDocument *toastXml)
+HRESULT SetTextValues(const std::vector<std::basic_string<wchar_t>>& vectLines, _In_ IXmlDocument *toastXml)
 {
-	HRESULT hr = vectLines.empty() ? S_OK : E_INVALIDARG;
+	HRESULT hr = !vectLines.empty() ? S_OK : E_INVALIDARG;
 	if (SUCCEEDED(hr))
 	{
 		ComPtr<IXmlNodeList> nodeList;
@@ -142,7 +140,7 @@ HRESULT SetNodeValueString(_In_ HSTRING inputString, _In_ IXmlNode *node, _In_ I
 HRESULT CreateToast(_In_ IToastNotificationManagerStatics *toastManager, _In_ IXmlDocument *xml, const ToastParams &params)
 {
 	ComPtr<IToastNotifier> notifier;
-	HRESULT hr = toastManager->CreateToastNotifierWithId(StringReferenceWrapper(AppId).Get(), &notifier);
+	HRESULT hr = toastManager->CreateToastNotifierWithId(StringReferenceWrapper(AppId.c_str(), AppId.length()).Get(), &notifier);
 	if (SUCCEEDED(hr))
 	{
 		ComPtr<IToastNotificationFactory> factory;

@@ -68,5 +68,11 @@
 #include <wrl\implements.h>
 #include <windows.ui.notifications.h>
 
+#include <string>
+#include <vector>
+
+#include <chrono>
+#include <thread>
+
 
 

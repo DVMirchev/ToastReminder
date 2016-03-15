@@ -3,14 +3,22 @@
 //
 
 #include "stdafx.h"
+
+#include <chrono>
+#include <thread>
+#include <future>
+#include <ctime>
+
 #include "ToastReminder.h"
 #include "ToastReminderDlg.h"
 #include "afxdialogex.h"
+#include "ToastHelpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+using namespace std::chrono_literals;
 
 // CAboutDlg dialog used for App About
 
@@ -64,6 +72,7 @@ BEGIN_MESSAGE_MAP(CToastReminderDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_START_LOOP, &CToastReminderDlg::OnClickedStartLoop)
 END_MESSAGE_MAP()
 
 
@@ -99,8 +108,6 @@ BOOL CToastReminderDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	ShowWindow(SW_MINIMIZE);
-
-	// TODO: Add extra initialization here
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -152,5 +159,50 @@ void CToastReminderDlg::OnPaint()
 HCURSOR CToastReminderDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+std::basic_string<TCHAR> NowAsString()
+{
+	std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+	TCHAR buf[26];
+	errno_t err;
+	err = _wctime_s(buf, 26, &t);
+
+	std::basic_string<TCHAR> ts(buf); // convert to calendar time
+	ts.resize(ts.size() - 1); // skip trailing newline
+	return ts;
+}
+
+void MainThreadLoop() 
+{
+	do 
+	{ 
+		std::this_thread::sleep_for( 20s );
+
+		ToastParams params;
+		params.vectLines.push_back(NowAsString());
+
+		DisplayToast(params);
+
+	} while (true);
+}
+
+
+void CToastReminderDlg::OnClickedStartLoop()
+{
+	ToastParams params;
+	params.vectLines.emplace_back(_T("Its ON!"));
+
+	DisplayToast(params);
+
+
+	if (!bRunning)
+	{
+		std::thread loopThread(MainThreadLoop);
+		loopThread.detach();
+	}
+
+	bRunning = true;
 }
 

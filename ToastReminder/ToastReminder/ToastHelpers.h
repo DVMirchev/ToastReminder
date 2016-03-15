@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
 
 struct ToastParams
 {
@@ -10,28 +8,28 @@ struct ToastParams
 	HWND hEdit = nullptr;
 };
 
-static HRESULT DisplayToast(const ToastParams &params);
+HRESULT DisplayToast(const ToastParams &params);
 
-static HRESULT CreateToastXml(
+HRESULT CreateToastXml(
 	_In_ ABI::Windows::UI::Notifications::IToastNotificationManagerStatics *toastManager,
 	_Outptr_ ABI::Windows::Data::Xml::Dom::IXmlDocument **xml,
 	_In_ const ToastParams &params
 	);
 
-static HRESULT CreateToast(
+HRESULT CreateToast(
 	_In_ ABI::Windows::UI::Notifications::IToastNotificationManagerStatics *toastManager,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *xml,
 	_In_ const ToastParams &params
 	);
-static HRESULT SetImageSrc(
+HRESULT SetImageSrc(
 	_In_z_ wchar_t *imagePath,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *toastXml
 	);
-static HRESULT SetTextValues(
-	std::vector<std::basic_string<wchar_t>> vectLines, 
+HRESULT SetTextValues(
+	const std::vector<std::basic_string<wchar_t>>& vectLines,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *toastXml
 	);
-static HRESULT SetNodeValueString(
+HRESULT SetNodeValueString(
 	_In_ HSTRING onputString,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlNode *node,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *xml
