@@ -28,7 +28,7 @@ HRESULT DisplayToast(const ToastParams &params)
 }
 
 // Create the toast XML from a template
-HRESULT CreateToastXml(_In_ IToastNotificationManagerStatics *toastManager, _Outptr_ IXmlDocument** inputXml, const ToastParams &params)
+HRESULT CreateToastXml(_In_ IToastNotificationManagerStatics *toastManager, _Outptr_ IXmlDocument** inputXml, _In_  const ToastParams &params)
 {
 	// Retrieve the template XML
 	HRESULT hr = toastManager->GetTemplateContent(ToastTemplateType_ToastImageAndText04, inputXml);
@@ -137,7 +137,7 @@ HRESULT SetNodeValueString(_In_ HSTRING inputString, _In_ IXmlNode *node, _In_ I
 }
 
 // Create and display the toast
-HRESULT CreateToast(_In_ IToastNotificationManagerStatics *toastManager, _In_ IXmlDocument *xml, const ToastParams &params)
+HRESULT CreateToast(_In_ IToastNotificationManagerStatics *toastManager, _In_ IXmlDocument *xml, _In_ const ToastParams &params)
 {
 	ComPtr<IToastNotifier> notifier;
 	HRESULT hr = toastManager->CreateToastNotifierWithId(StringReferenceWrapper(AppId.c_str(), AppId.length()).Get(), &notifier);

@@ -179,10 +179,8 @@ void MainThreadLoop()
 {
 	do 
 	{ 
-
 		auto tNow = std::chrono::system_clock::now();
-
-		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<60>>>(tNow.time_since_epoch()) + 1min;
+		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>>(tNow.time_since_epoch()) + 15min;
 
 		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
 
