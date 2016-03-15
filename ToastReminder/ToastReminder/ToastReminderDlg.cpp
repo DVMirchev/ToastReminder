@@ -8,6 +8,7 @@
 #include <thread>
 #include <future>
 #include <ctime>
+#include <ratio>
 
 #include "ToastReminder.h"
 #include "ToastReminderDlg.h"
@@ -178,7 +179,12 @@ void MainThreadLoop()
 {
 	do 
 	{ 
-		std::this_thread::sleep_for( 20s );
+
+		auto tNow = std::chrono::system_clock::now();
+
+		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<60>>>(tNow.time_since_epoch()) + 1min;
+
+		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
 
 		ToastParams params;
 		params.vectLines.push_back(NowAsString());
@@ -193,6 +199,7 @@ void CToastReminderDlg::OnClickedStartLoop()
 {
 	ToastParams params;
 	params.vectLines.emplace_back(_T("Its ON!"));
+	params.vectLines.push_back(NowAsString());
 
 	DisplayToast(params);
 
