@@ -65,5 +65,20 @@
     <Image Include="res\ToastReminder.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="00.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="15.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="30.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="45.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="glavata.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

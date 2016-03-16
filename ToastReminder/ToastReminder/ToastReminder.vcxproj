@@ -221,6 +221,11 @@
     <None Include="res\ToastReminder.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="00.png" />
+    <Image Include="15.png" />
+    <Image Include="30.png" />
+    <Image Include="45.png" />
+    <Image Include="glavata.jpg" />
     <Image Include="res\ToastReminder.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

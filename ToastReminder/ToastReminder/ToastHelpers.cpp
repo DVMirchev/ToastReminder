@@ -34,7 +34,7 @@ HRESULT CreateToastXml(_In_ IToastNotificationManagerStatics *toastManager, _Out
 	HRESULT hr = toastManager->GetTemplateContent(ToastTemplateType_ToastImageAndText04, inputXml);
 	if (SUCCEEDED(hr))
 	{
-		wchar_t *imagePath = _wfullpath(nullptr, L"toastImageAndText.png", MAX_PATH);
+		wchar_t *imagePath = _wfullpath(nullptr, params.imagePath.c_str(), MAX_PATH);
 
 		hr = imagePath != nullptr ? S_OK : HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 		if (SUCCEEDED(hr))

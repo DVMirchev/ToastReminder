@@ -3,6 +3,8 @@
 struct ToastParams
 {
 	std::vector<std::basic_string<wchar_t>> vectLines;
+	std::basic_string<wchar_t> imagePath;
+	std::basic_string<wchar_t> audioPath;
 	bool bHandles = false;
 	HWND hwnd = nullptr;
 	HWND hEdit = nullptr;

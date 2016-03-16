@@ -179,12 +179,43 @@ void MainThreadLoop()
 {
 	do 
 	{ 
-		auto tNow = std::chrono::system_clock::now();
-		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>>(tNow.time_since_epoch()) + 15min;
-
-		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
-
 		ToastParams params;
+		auto tNow     = std::chrono::system_clock::now();
+		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
+		auto toHours  = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
+
+		int nQuater = (to15mins - toHours) / 15min;
+
+#ifdef _DEBUG
+		std::this_thread::sleep_for(15s);
+#else
+		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
+#endif
+
+
+		switch (nQuater)
+		{
+		case 0:
+			params.vectLines.push_back(_T(":00"));
+			params.imagePath = _T("00.png");
+			break;
+		case 1:
+			params.vectLines.push_back(_T(":15"));
+			params.imagePath = _T("15.png");
+			break;
+		case 2:
+			params.vectLines.push_back(_T(":30"));
+			params.imagePath = _T("30.png");
+			break;
+		case 3:
+			params.vectLines.push_back(_T(":45"));
+			params.imagePath = _T("45.png");
+			break;
+		default:
+			params.vectLines.push_back(_T("Neshto se precaka!!!"));
+			break;
+		}
+
 		params.vectLines.push_back(NowAsString());
 
 		DisplayToast(params);
@@ -198,6 +229,7 @@ void CToastReminderDlg::OnClickedStartLoop()
 	ToastParams params;
 	params.vectLines.emplace_back(_T("Its ON!"));
 	params.vectLines.push_back(NowAsString());
+	params.imagePath = _T("glavata.jpg");
 
 	DisplayToast(params);
 
