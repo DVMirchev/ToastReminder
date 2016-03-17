@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToastReminder", "ToastReminder\ToastReminder.vcxproj", "{5192C0CA-81E2-4A6B-91D9-46C8BDBD5D80}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ToastSetup", "ToastSetup\ToastSetup.vdproj", "{66876CD3-F9F5-4834-AFFD-E18DA2765F47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{5192C0CA-81E2-4A6B-91D9-46C8BDBD5D80}.Release|x64.Build.0 = Release|x64
 		{5192C0CA-81E2-4A6B-91D9-46C8BDBD5D80}.Release|x86.ActiveCfg = Release|Win32
 		{5192C0CA-81E2-4A6B-91D9-46C8BDBD5D80}.Release|x86.Build.0 = Release|Win32
+		{66876CD3-F9F5-4834-AFFD-E18DA2765F47}.Debug|x64.ActiveCfg = Debug
+		{66876CD3-F9F5-4834-AFFD-E18DA2765F47}.Debug|x86.ActiveCfg = Debug
+		{66876CD3-F9F5-4834-AFFD-E18DA2765F47}.Release|x64.ActiveCfg = Release
+		{66876CD3-F9F5-4834-AFFD-E18DA2765F47}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

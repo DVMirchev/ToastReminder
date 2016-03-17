@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CToastReminderDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_START_LOOP, &CToastReminderDlg::OnClickedStartLoop)
+	ON_BN_CLICKED(IDOK, &CToastReminderDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -175,16 +176,57 @@ std::basic_string<TCHAR> NowAsString()
 	return ts;
 }
 
+void ShowTimeToast(std::basic_string<TCHAR> str = {})
+{
+	ToastParams params;
+
+	if (!str.empty())
+		params.vectLines.push_back(str);
+
+	auto tNow     = std::chrono::system_clock::now();
+	auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
+	auto toHours  = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
+
+	int nQuater = (to15mins - toHours) / 15min;
+
+	switch (nQuater)
+	{
+	case 4:	 [[fallthrough]]
+	case 0:
+		params.vectLines.push_back(_T(":00"));
+		params.imagePath = _T("00.png");
+		break;
+	case 1:
+		params.vectLines.push_back(_T(":15"));
+		params.imagePath = _T("15.png");
+		break;
+	case 2:
+		params.vectLines.push_back(_T(":30"));
+		params.imagePath = _T("30.png");
+		break;
+	case 3:
+		params.vectLines.push_back(_T(":45"));
+		params.imagePath = _T("45.png");
+		break;
+	default:
+		params.vectLines.push_back(_T("Neshto se precaka!!!"));
+		break;
+	}
+
+	params.vectLines.push_back(NowAsString());
+
+	DisplayToast(params);
+
+}
+
 void MainThreadLoop() 
 {
 	do 
-	{ 
+	{
 		ToastParams params;
 		auto tNow     = std::chrono::system_clock::now();
 		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
 		auto toHours  = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
-
-		int nQuater = (to15mins - toHours) / 15min;
 
 #ifdef _DEBUG
 		std::this_thread::sleep_for(15s);
@@ -192,55 +234,35 @@ void MainThreadLoop()
 		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
 #endif
 
-
-		switch (nQuater)
-		{
-		case 4:	 [[fallthrough]]
-		case 0:
-			params.vectLines.push_back(_T(":00"));
-			params.imagePath = _T("00.png");
-			break;
-		case 1:
-			params.vectLines.push_back(_T(":15"));
-			params.imagePath = _T("15.png");
-			break;
-		case 2:
-			params.vectLines.push_back(_T(":30"));
-			params.imagePath = _T("30.png");
-			break;
-		case 3:
-			params.vectLines.push_back(_T(":45"));
-			params.imagePath = _T("45.png");
-			break;
-		default:
-			params.vectLines.push_back(_T("Neshto se precaka!!!"));
-			break;
-		}
-
-		params.vectLines.push_back(NowAsString());
-
-		DisplayToast(params);
-
+		ShowTimeToast();
 	} while (true);
 }
 
 
 void CToastReminderDlg::OnClickedStartLoop()
 {
-	ToastParams params;
-	params.vectLines.emplace_back(_T("Its ON!"));
-	params.vectLines.push_back(NowAsString());
-	params.imagePath = _T("glavata.jpg");
-
-	DisplayToast(params);
-
-
 	if (!bRunning)
 	{
+		ToastParams params;
+		params.vectLines.emplace_back(_T("Its ON!"));
+		params.vectLines.push_back(NowAsString());
+		params.imagePath = _T("glavata.jpg");
+
+		DisplayToast(params);
+
+
 		std::thread loopThread(MainThreadLoop);
 		loopThread.detach();
 	}
+	else
+		ShowTimeToast(_T("Next toaster:"));
 
 	bRunning = true;
 }
 
+
+
+void CToastReminderDlg::OnBnClickedOk()
+{
+	ShowWindow(SW_MINIMIZE);
+}
