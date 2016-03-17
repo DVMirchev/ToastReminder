@@ -109,7 +109,6 @@ BOOL CToastReminderDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-	ShowWindow(SW_MINIMIZE);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -219,26 +218,6 @@ void ShowTimeToast(std::basic_string<TCHAR> str = {})
 
 }
 
-void MainThreadLoop() 
-{
-	do 
-	{
-		ToastParams params;
-		auto tNow     = std::chrono::system_clock::now();
-		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
-		auto toHours  = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
-
-#ifdef _DEBUG
-		std::this_thread::sleep_for(15s);
-#else
-		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
-#endif
-
-		ShowTimeToast();
-	} while (true);
-}
-
-
 void CToastReminderDlg::OnClickedStartLoop()
 {
 	if (!bRunning)
@@ -247,12 +226,32 @@ void CToastReminderDlg::OnClickedStartLoop()
 		params.vectLines.emplace_back(_T("Its ON!"));
 		params.vectLines.push_back(NowAsString());
 		params.imagePath = _T("glavata.jpg");
+		params.audioPath = _T("1.mp3");
 
 		DisplayToast(params);
 
 
-		std::thread loopThread(MainThreadLoop);
+		std::thread loopThread([] {
+			do
+			{
+				ToastParams params;
+				auto tNow = std::chrono::system_clock::now();
+				auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
+				auto toHours = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
+
+#ifdef _DEBUG
+				std::this_thread::sleep_for(15s);
+#else
+				std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
+#endif
+
+				ShowTimeToast();
+			} while (true);
+		});
+
 		loopThread.detach();
+
+		ShowWindow(SW_MINIMIZE);
 	}
 	else
 		ShowTimeToast(_T("Next toaster:"));

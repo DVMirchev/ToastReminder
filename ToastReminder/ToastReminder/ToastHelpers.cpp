@@ -42,7 +42,16 @@ HRESULT CreateToastXml(_In_ IToastNotificationManagerStatics *toastManager, _Out
 			hr = SetImageSrc(imagePath, *inputXml);
 			if (SUCCEEDED(hr))
 			{
-				hr = SetTextValues(params.vectLines, *inputXml);
+				wchar_t *audioPath = _wfullpath(nullptr, params.audioPath.c_str(), MAX_PATH);
+				hr = audioPath != nullptr ? S_OK : HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
+				if (SUCCEEDED(hr))
+				{
+					hr = SetAudioSrc(audioPath, *inputXml);
+					if (SUCCEEDED(hr))
+					{
+						hr = SetTextValues(params.vectLines, *inputXml);
+					}
+				}
 			}
 		}
 	}
@@ -75,6 +84,42 @@ HRESULT SetImageSrc(_In_z_ wchar_t *imagePath, _In_ IXmlDocument *toastXml)
 					if (SUCCEEDED(hr))
 					{
 						hr = SetNodeValueString(StringReferenceWrapper(imageSrc).Get(), srcAttribute.Get(), toastXml);
+					}
+				}
+			}
+		}
+	}
+	return hr;
+}
+
+
+
+// Set the value of the "src" attribute of the "audio" node
+HRESULT SetAudioSrc(_In_z_ wchar_t *audioPath, _In_ IXmlDocument *toastXml)
+{
+	wchar_t audioSrc[MAX_PATH] = L"ms-appx:///";
+	HRESULT hr = StringCchCat(audioSrc, ARRAYSIZE(audioSrc), audioPath);
+	if (SUCCEEDED(hr))
+	{
+		ComPtr<IXmlNodeList> nodeList;
+		hr = toastXml->GetElementsByTagName(StringReferenceWrapper(L"audio").Get(), &nodeList);
+		if (SUCCEEDED(hr))
+		{
+			ComPtr<IXmlNode> audioNode;
+			hr = nodeList->Item(0, &audioNode);
+			if (SUCCEEDED(hr) && audioNode)
+			{
+				ComPtr<IXmlNamedNodeMap> attributes;
+
+				hr = audioNode->get_Attributes(&attributes);
+				if (SUCCEEDED(hr))
+				{
+					ComPtr<IXmlNode> srcAttribute;
+
+					hr = attributes->GetNamedItem(StringReferenceWrapper(L"src").Get(), &srcAttribute);
+					if (SUCCEEDED(hr))
+					{
+						hr = SetNodeValueString(StringReferenceWrapper(audioSrc).Get(), srcAttribute.Get(), toastXml);
 					}
 				}
 			}

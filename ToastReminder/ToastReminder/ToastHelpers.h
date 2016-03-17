@@ -27,6 +27,10 @@ HRESULT SetImageSrc(
 	_In_z_ wchar_t *imagePath,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *toastXml
 	);
+HRESULT SetAudioSrc(
+	_In_z_ wchar_t *imagePath,
+	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *toastXml
+	);
 HRESULT SetTextValues(
 	const std::vector<std::basic_string<wchar_t>>& vectLines,
 	_In_ ABI::Windows::Data::Xml::Dom::IXmlDocument *toastXml
