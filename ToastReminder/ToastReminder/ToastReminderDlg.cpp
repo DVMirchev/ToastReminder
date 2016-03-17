@@ -195,6 +195,7 @@ void MainThreadLoop()
 
 		switch (nQuater)
 		{
+		case 4:	 [[fallthrough]]
 		case 0:
 			params.vectLines.push_back(_T(":00"));
 			params.imagePath = _T("00.png");
