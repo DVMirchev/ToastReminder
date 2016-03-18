@@ -109,7 +109,6 @@ BOOL CToastReminderDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -215,8 +214,56 @@ void ShowTimeToast(std::basic_string<TCHAR> str = {})
 	params.vectLines.push_back(NowAsString());
 
 	DisplayToast(params);
-
 }
+
+
+void MainThreadLoop() 
+{
+	do 
+	{
+		ToastParams params;
+		auto tNow     = std::chrono::system_clock::now();
+		auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
+		auto toHours  = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
+
+#ifdef _DEBUG
+		std::this_thread::sleep_for(15s);
+#else
+		std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
+#endif
+
+		int nQuater = (to15mins - toHours) / 15min;
+
+		switch (nQuater)
+		{
+		case 4:	 [[fallthrough]]
+		case 0:
+			params.vectLines.push_back(_T(":00"));
+			params.imagePath = _T("00.png");
+			break;
+		case 1:
+			params.vectLines.push_back(_T(":15"));
+			params.imagePath = _T("15.png");
+			break;
+		case 2:
+			params.vectLines.push_back(_T(":30"));
+			params.imagePath = _T("30.png");
+			break;
+		case 3:
+			params.vectLines.push_back(_T(":45"));
+			params.imagePath = _T("45.png");
+			break;
+		default:
+			params.vectLines.push_back(_T("Neshto se precaka!!!"));
+			break;
+		}
+
+		params.vectLines.push_back(NowAsString());
+
+		DisplayToast(params);
+	} while (true);
+}
+
 
 void CToastReminderDlg::OnClickedStartLoop()
 {
@@ -231,34 +278,15 @@ void CToastReminderDlg::OnClickedStartLoop()
 		DisplayToast(params);
 
 
-		std::thread loopThread([] {
-			do
-			{
-				ToastParams params;
-				auto tNow = std::chrono::system_clock::now();
-				auto to15mins = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<900>>> (tNow.time_since_epoch()) + 15min;
-				auto toHours = std::chrono::duration_cast<std::chrono::duration<int, std::ratio<3600>>>(tNow.time_since_epoch());
-
-#ifdef _DEBUG
-				std::this_thread::sleep_for(15s);
-#else
-				std::this_thread::sleep_for(to15mins - tNow.time_since_epoch());
-#endif
-
-				ShowTimeToast();
-			} while (true);
-		});
-
+		std::thread loopThread(MainThreadLoop);
 		loopThread.detach();
-
-		ShowWindow(SW_MINIMIZE);
 	}
 	else
 		ShowTimeToast(_T("Next toaster:"));
 
+	ShowWindow(SW_MINIMIZE);
 	bRunning = true;
 }
-
 
 
 void CToastReminderDlg::OnBnClickedOk()
